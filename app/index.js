@@ -17,7 +17,6 @@ module.exports = class extends Generator {
     }
 
     writing() {
-        this.log('Creating package.json...');
         const pkgJson = {
             name: `webvoxel-plugin-${this.answers.plugin_name}`,
             scripts: {
@@ -38,7 +37,6 @@ module.exports = class extends Generator {
 
         this.fs.extendJSON(this.destinationPath('package.json'), pkgJson);
 
-        this.log('Creating webpack configs...');
         this.fs.copyTpl(
             this.templatePath('webpack.common.js'),
             this.destinationPath('webpack.common.js'),
@@ -53,6 +51,30 @@ module.exports = class extends Generator {
         this.fs.copy(
             this.templatePath('webpack.prod.js'),
             this.destinationPath('webpack.prod.js'),
+        );
+
+        this.fs.copy(
+            this.templatePath('.gitignore'),
+            this.destinationPath('.gitignore'),
+        );
+
+        this.fs.extendJSON(this.destinationPath('.prettierrc.json'), {
+            useTabs: true,
+            semi: true,
+            tabWidth: 4,
+            singleQuote: true,
+        });
+
+        this.fs.copyTpl(
+            this.templatePath('index.ts'),
+            this.destinationPath('src/index.ts'),
+            { name: this.answers.plugin_name },
+        );
+
+        this.fs.copyTpl(
+            this.templatePath('README.md'),
+            this.destinationPath('README.md'),
+            { name: this.answers.plugin_name },
         );
     }
 

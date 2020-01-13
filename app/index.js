@@ -6,7 +6,7 @@ module.exports = class extends Generator {
     }
 
     async prompting() {
-        this.answers = this.prompt([
+        this.answers = await this.prompt([
             {
                 type: 'input',
                 name: 'plugin_name',
@@ -27,6 +27,7 @@ module.exports = class extends Generator {
             devDependencies: {
                 webpack: 'latest',
                 'webpack-cli': 'latest',
+                'webpack-merge': 'latest',
                 'awesome-typescript-loader': 'latest',
                 typescript: 'latest',
             },
@@ -41,7 +42,17 @@ module.exports = class extends Generator {
         this.fs.copyTpl(
             this.templatePath('webpack.common.js'),
             this.destinationPath('webpack.common.js'),
-            { name: this.answers.plugin_name }
+            { name: this.answers.plugin_name },
+        );
+
+        this.fs.copy(
+            this.templatePath('webpack.dev.js'),
+            this.destinationPath('webpack.dev.js'),
+        );
+
+        this.fs.copy(
+            this.templatePath('webpack.prod.js'),
+            this.destinationPath('webpack.prod.js'),
         );
     }
 

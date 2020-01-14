@@ -22,6 +22,7 @@ module.exports = class extends Generator {
             scripts: {
                 dev: 'webpack --config webpack.dev.js',
                 package: 'webpack --config webpack.prod.js',
+                prepublishOnly: 'yarn package',
             },
             devDependencies: {
                 webpack: 'latest',
@@ -63,6 +64,19 @@ module.exports = class extends Generator {
             semi: true,
             tabWidth: 4,
             singleQuote: true,
+        });
+
+        this.fs.extendJSON(this.destinationPath('tsconfig.json'), {
+            compilerOptions: {
+                target: 'es5',
+                module: 'commonjs',
+                strict: true,
+                esModuleInterop: true,
+                forceConsistentCasingInFileNames: true,
+                moduleResolution: 'node',
+                lib: ['dom', 'es2015'],
+                declaration: true
+            },
         });
 
         this.fs.copyTpl(
